@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import org.jetbrains.exposed.v1.jdbc.Database
-import dev.dodia.voice.VoiceHubEvents
 
 class Bot {
     companion object {
@@ -28,7 +27,6 @@ class Bot {
                     GatewayIntent.GUILD_MESSAGES,
                     GatewayIntent.GUILD_MEMBERS,
                     GatewayIntent.MESSAGE_CONTENT,
-
                 )
 
                 setMemberCachePolicy(MemberCachePolicy.ALL)
@@ -40,7 +38,6 @@ class Bot {
 
             PlayerEvents.register()
             BotEvents.register()
-            VoiceHubEvents.register()
 
             jda.awaitReady()
 
