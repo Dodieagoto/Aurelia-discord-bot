@@ -1,5 +1,7 @@
 package dev.dodia
 
+import dev.dodia.events.BotEvents
+import dev.dodia.events.PlayerEvents
 import dev.minn.jda.ktx.jdabuilder.light
 import io.github.cdimascio.dotenv.Dotenv
 import net.dv8tion.jda.api.JDA
@@ -29,7 +31,11 @@ class Bot {
                 setChunkingFilter(ChunkingFilter.ALL)
             }
 
+
             PlayerEvents.register()
+            BotEvents.register()
+
+            jda.awaitReady()
 
         }
     }
