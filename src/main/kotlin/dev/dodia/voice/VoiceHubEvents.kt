@@ -14,8 +14,8 @@ import net.dv8tion.jda.api.modals.Modal
 
 object VoiceHubEvents {
 
-    private const val TRIGGER_CHANNEL_ID = 0L
-    private const val TARGET_CATEGORY_ID = 0L
+    private const val TRIGGER_CHANNEL_ID = 1536082934291890206
+    private const val TARGET_CATEGORY_ID = 1536083195781578832
 
     fun register() {
 
