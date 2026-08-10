@@ -1,6 +1,7 @@
 package dev.dodia.events
 
 import dev.dodia.Bot.Companion.jda
+import dev.dodia.database.repository.MemberRepository
 import dev.dodia.messages.PanelMessage
 import dev.dodia.messages.PlayerJoinMessage
 import dev.minn.jda.ktx.events.listener
@@ -12,7 +13,10 @@ object PlayerEvents {
     fun register(){
 
         jda.listener<GuildMemberJoinEvent>{ event ->
+
+            MemberRepository.addMember(event.member)
             PlayerJoinMessage.send(event)
+
         }
 
         jda.listener<MessageReceivedEvent>{ event ->

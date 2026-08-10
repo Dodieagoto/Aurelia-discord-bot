@@ -27,14 +27,13 @@ object MemberRepository {
                 ?.toMemberModel()
         }
 
-    suspend fun addMember(member: Member) {
-        DatabaseExecutor.transaction {
-            MembersTable.upsert(MembersTable.discordId) {
-                it[discordId] = member.id
-                it[isFirstJoin] = false
-                it[firstJoin] = Clock.System.now()
-            }
+    fun addMember(member: Member) {
+        MembersTable.upsert(MembersTable.discordId) {
+            it[discordId] = member.id
+            it[isFirstJoin] = false
+            it[firstJoin] = Clock.System.now()
         }
+
     }
 
 }
