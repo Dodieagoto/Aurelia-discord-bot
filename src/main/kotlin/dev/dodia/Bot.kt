@@ -29,6 +29,8 @@ class Bot {
                 setChunkingFilter(ChunkingFilter.ALL)
             }
 
+            PlayerEvents.register()
+
         }
     }
 }
