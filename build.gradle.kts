@@ -27,6 +27,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:1.4.0")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:1.4.0")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.5.6")
+    implementation("org.xerial:sqlite-jdbc:3.49.0.0")
 }
 
 kotlin {

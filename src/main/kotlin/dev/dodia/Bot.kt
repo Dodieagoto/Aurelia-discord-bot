@@ -1,5 +1,6 @@
 package dev.dodia
 
+import dev.dodia.database.DataBase
 import dev.dodia.events.BotEvents
 import dev.dodia.events.PlayerEvents
 import dev.minn.jda.ktx.jdabuilder.light
@@ -8,6 +9,7 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
+import org.jetbrains.exposed.v1.jdbc.Database
 
 class Bot {
     companion object {
@@ -31,6 +33,8 @@ class Bot {
                 setChunkingFilter(ChunkingFilter.ALL)
             }
 
+
+            DataBase()
 
             PlayerEvents.register()
             BotEvents.register()
