@@ -14,8 +14,8 @@ import net.dv8tion.jda.api.modals.Modal
 
 object VoiceHubEvents {
 
-    private const val TRIGGER_CHANNEL_ID = 1536082934291890206
-    private const val TARGET_CATEGORY_ID = 1536083195781578832
+    private const val TRIGGER_CHANNEL_ID = 1536082934291890206L
+    private const val TARGET_CATEGORY_ID = 1536083195781578832L
 
     fun register() {
 
@@ -28,6 +28,8 @@ object VoiceHubEvents {
             }
 
             val joined = event.channelJoined
+            println("[VoiceHub] joined=${joined?.idLong} trigger=$TRIGGER_CHANNEL_ID")
+
             if (joined != null && joined.idLong == TRIGGER_CHANNEL_ID) {
                 createChannel(event.member.id, event.guild)
             }
@@ -103,14 +105,21 @@ object VoiceHubEvents {
 
     private fun createChannel(ownerId: String, guild: Guild) {
 
-        val category = guild.getCategoryById(TARGET_CATEGORY_ID) ?: return
-        val owner = guild.getMemberById(ownerId) ?: return
+        val category = guild.getCategoryById(TARGET_CATEGORY_ID)
+        val owner = guild.getMemberById(ownerId)
 
-        category.createVoiceChannel("Войс ${owner.effectiveName}").queue { channel ->
+        println("[VoiceHub] category=$category owner=$owner")
+
+        if (category == null || owner == null) return
+
+        category.createVoiceChannel("Войс ${owner.effectiveName}").queue({ channel ->
+            println("[VoiceHub] канал создан: ${channel.id}")
             VoiceHubRegistry.register(channel.idLong, owner.idLong)
             guild.moveVoiceMember(owner, channel).queue()
             channel.sendMessage(VoiceSettingsMessage.build(channel.idLong)).queue()
-        }
+        }, { error ->
+            println("[VoiceHub] ошибка создания канала: ${error.message}")
+        })
 
     }
 
