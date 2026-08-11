@@ -12,8 +12,7 @@ data class MemberModel(
     val exp: Long = 0L,
     val coins: Long = 0L,
     val diamonds: Long = 0L,
-) {
-}
+)
 
 fun ResultRow.toMemberModel(): MemberModel {
     return MemberModel(

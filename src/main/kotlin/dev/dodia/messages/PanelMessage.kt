@@ -32,9 +32,9 @@ object PanelMessage {
             actionRow {
                 button(
                     customId = "open-ticket-btn",
-                    label = "Создать тикет",
-                    style = ButtonStyle.PRIMARY,
-                    emoji = Emoji.fromUnicode("\uD83D\uDCEC")
+                    label = "Получить поддержку",
+                    style = ButtonStyle.SECONDARY,
+                    emoji = Emoji.fromUnicode("💗")
                 )
             }
 

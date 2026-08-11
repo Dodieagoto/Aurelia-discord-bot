@@ -9,33 +9,46 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction
 
 object ProfilePanel {
-    suspend fun send(event: SlashCommandInteractionEvent) {
+    suspend fun send(event: CommandInteraction) {
+        try {
+            val discordId = event.member?.id ?: event.user.id
 
-        val member = MemberRepository.getMember(event.member!!.id)
+            val member = runCatching { MemberRepository.getMember(discordId) }
+                .onFailure { println("Ошибка получения участника из БД: ${it.stackTraceToString()}") }
+                .getOrNull()
 
-        event.channel.sendMessage(
-            MessageCreate(useComponentsV2 = true){
-                container {
-                    section {
-                        accessory = Thumbnail(event.member?.avatar!!.url)
+            val avatarUrl = event.member?.effectiveAvatarUrl
+                ?: event.user.effectiveAvatarUrl
 
-                        text(
-                            """
-                                ## 👋 Добро пожаловать в ваш профиль <@${event.member!!.id}>
-                                
-                                - ### Ваш уровень: //todo: сделать деление exp для уровня
-                                -# всего exp: ${member?.exp}
-                                
-                                - 🪙 Монет: ${member?.coins}
-                                - 💎 Алмазов: ${member?.diamonds}
-                                
-                            """.trimIndent()
-                        )
+            event.reply(
+                MessageCreate(useComponentsV2 = true) {
+                    container {
+                        section {
+                            accessory = Thumbnail(avatarUrl)
+
+                            text(
+                                """
+                                    ## 👋 Добро пожаловать в ваш профиль <@$discordId>
+                                    
+                                    - ### Ваш уровень: //todo: сделать деление exp для уровня
+                                    -# всего exp: ${member?.exp ?: -1}
+                                    
+                                    - 🪙 Монет: ${member?.coins ?: -1}
+                                    - 💎 Алмазов: ${member?.diamonds ?: -1}
+                                    
+                                """.trimIndent()
+                            )
+                        }
                     }
                 }
+            )
+                .setEphemeral(true)
+                .queue()
+        } catch (e: Exception) {
+            println("Ошибка в ProfilePanel.send: ${e.stackTraceToString()}")
+            runCatching {
+                event.reply("⚠️ Не удалось загрузить профиль. Попробуйте позже.").setEphemeral(true).queue()
             }
-        )
-
+        }
     }
-
 }
