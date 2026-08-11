@@ -1,5 +1,6 @@
 package dev.dodia
 
+import dev.dodia.commands.Commands
 import dev.dodia.database.DataBase
 import dev.dodia.events.BotEvents
 import dev.dodia.events.PlayerEvents
@@ -38,6 +39,7 @@ class Bot {
 
             PlayerEvents.register()
             BotEvents.register()
+            Commands.register()
 
             jda.awaitReady()
 

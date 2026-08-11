@@ -3,7 +3,7 @@ package dev.dodia.events
 import dev.dodia.Bot.Companion.jda
 import dev.dodia.database.repository.MemberRepository
 import dev.dodia.messages.PanelMessage
-import dev.dodia.messages.PlayerJoinMessage
+import dev.dodia.messages.PlayerJoinMessages
 import dev.minn.jda.ktx.events.listener
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -13,11 +13,14 @@ object PlayerEvents {
     fun register(){
 
         jda.listener<GuildMemberJoinEvent> { event ->
-            runCatching {
-                PlayerJoinMessage.send(event)
+
+            if (!MemberRepository.exists(event.member.id)) {
+
+                PlayerJoinMessages.sendFirstJoinMessage(event)
                 MemberRepository.addMember(event.member.id)
-            }.onFailure {
-                println("Ошибка в GuildMemberJoinEvent: ${it.stackTraceToString()}")
+
+            } else {
+                PlayerJoinMessages.sendReturnJoinMessage(event)
             }
         }
 
@@ -34,12 +37,6 @@ object PlayerEvents {
             if (event.message.contentRaw == "!доб"){
                 MemberRepository.addMember(event.member!!.id)
             }
-
-            if (event.message.contentRaw == "!абд"){
-                MemberRepository.addCoinsToMember(event.member!!.id, 100L)
-            }
         }
-
     }
-
 }

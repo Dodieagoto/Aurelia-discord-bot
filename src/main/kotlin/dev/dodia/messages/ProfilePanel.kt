@@ -19,7 +19,6 @@ object ProfilePanel {
 
             val avatarUrl = event.member?.effectiveAvatarUrl
                 ?: event.user.effectiveAvatarUrl
-                ?: event.user.defaultAvatarUrl
 
             event.reply(
                 MessageCreate(useComponentsV2 = true) {
@@ -32,10 +31,10 @@ object ProfilePanel {
                                     ## 👋 Добро пожаловать в ваш профиль <@$discordId>
                                     
                                     - ### Ваш уровень: //todo: сделать деление exp для уровня
-                                    -# всего exp: ${member?.exp ?: 0}
+                                    -# всего exp: ${member?.exp ?: -1}
                                     
-                                    - 🪙 Монет: ${member?.coins ?: 0}
-                                    - 💎 Алмазов: ${member?.diamonds ?: 0}
+                                    - 🪙 Монет: ${member?.coins ?: -1}
+                                    - 💎 Алмазов: ${member?.diamonds ?: -1}
                                     
                                 """.trimIndent()
                             )
