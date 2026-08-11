@@ -19,6 +19,8 @@ object VoiceHubEvents {
 
     fun register() {
 
+        println("[VoiceHub] register() вызван")
+
         jda.listener<GuildVoiceUpdateEvent> { event ->
 
             val left = event.channelLeft

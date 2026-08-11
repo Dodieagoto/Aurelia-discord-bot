@@ -10,7 +10,7 @@ object VoiceSettingsMessage {
     fun build(channelId: Long) = MessageCreate(useComponentsV2 = true) {
         container {
             text("""
-                > ## 🔊 Настройка Голосового канала
+                > ## 🔊 НАСТРОЙКИ ВОЙСА
                 
                 Нажмите на кнопку ниже, чтобы изменить название, лимит участников и статус вашего войса.
                 
