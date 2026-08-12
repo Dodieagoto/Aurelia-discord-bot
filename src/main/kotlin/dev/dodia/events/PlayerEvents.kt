@@ -35,7 +35,21 @@ object PlayerEvents {
             }
 
             if (event.message.contentRaw == "!доб"){
+                event.message.delete().queue()
                 MemberRepository.addMember(event.member!!.id)
+            }
+
+            if (event.message.contentRaw == "!удл"){
+                event.message.delete().queue()
+                MemberRepository.removeMember(event.member!!.id)
+            }
+
+            if (event.message.contentRaw == "!+"){
+                event.message.delete().queue()
+                MemberRepository.addReward(
+                    discordId = event.member!!.id,
+                    exp = 100000
+                )
             }
         }
     }

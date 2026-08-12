@@ -3,9 +3,6 @@ package dev.dodia.messages
 import dev.dodia.database.repository.MemberRepository
 import dev.minn.jda.ktx.messages.MessageCreate
 import dev.minn.jda.ktx.interactions.components.Thumbnail
-import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction
 
 object ProfilePanel {
@@ -30,8 +27,8 @@ object ProfilePanel {
                                 """
                                     ## 👋 Добро пожаловать в ваш профиль <@$discordId>
                                     
-                                    - ### Ваш уровень: //todo: сделать деление exp для уровня
-                                    -# всего exp: ${member?.exp ?: -1}
+                                    - Ваш уровень: ${member?.lvl}
+                                    -# всего exp: ${member?.exp ?: -1} / ${member?.levelUp}
                                     
                                     - 🪙 Монет: ${member?.coins ?: -1}
                                     - 💎 Алмазов: ${member?.diamonds ?: -1}

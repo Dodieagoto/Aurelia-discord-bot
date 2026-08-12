@@ -1,11 +1,11 @@
 package dev.dodia.database
 
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.withContext
-import dev.dodia.database.DataBase.Companion.sqlite
-import org.jetbrains.exposed.v1.core.Transaction
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import dev.dodia.database.DataBase.Companion.db
+import org.jetbrains.exposed.v1.core.Transaction
+import kotlinx.coroutines.asCoroutineDispatcher
 import java.util.concurrent.ExecutorService
+import kotlinx.coroutines.withContext
 import java.util.concurrent.Executors
 
 object DatabaseExecutor {
@@ -14,7 +14,7 @@ object DatabaseExecutor {
 
     suspend fun <T> transaction(block: Transaction.() -> T): T =
         withContext(dispatcher) {
-            transaction(sqlite) {
+            transaction(db) {
                 block()
             }
         }

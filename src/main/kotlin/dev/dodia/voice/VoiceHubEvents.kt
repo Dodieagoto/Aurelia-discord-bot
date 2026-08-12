@@ -2,6 +2,7 @@ package dev.dodia.voice
 
 import dev.dodia.Bot.Companion.jda
 import dev.minn.jda.ktx.events.listener
+import dev.minn.jda.ktx.events.onButton
 import net.dv8tion.jda.api.components.label.Label
 import net.dv8tion.jda.api.components.textinput.TextInput
 import net.dv8tion.jda.api.components.textinput.TextInputStyle
@@ -14,12 +15,10 @@ import net.dv8tion.jda.api.modals.Modal
 
 object VoiceHubEvents {
 
-    private const val TRIGGER_CHANNEL_ID = 1536082934291890206L
-    private const val TARGET_CATEGORY_ID = 1536083195781578832L
+    private const val TRIGGER_CHANNEL_ID = 1536082934291890206
+    private const val TARGET_CATEGORY_ID = 1536083195781578832
 
     fun register() {
-
-        println("[VoiceHub] register() вызван")
 
         jda.listener<GuildVoiceUpdateEvent> { event ->
 
@@ -30,25 +29,23 @@ object VoiceHubEvents {
             }
 
             val joined = event.channelJoined
-            println("[VoiceHub] joined=${joined?.idLong} trigger=$TRIGGER_CHANNEL_ID")
-
             if (joined != null && joined.idLong == TRIGGER_CHANNEL_ID) {
                 createChannel(event.member.id, event.guild)
             }
 
         }
 
-        jda.listener<ButtonInteractionEvent> { event ->
+        jda.onButton(""){ event ->
 
             val customId = event.componentId
-            if (!customId.startsWith("voice-settings-btn:")) return@listener
+            if (!customId.startsWith("voice-settings-btn:")) return@onButton
 
             val channelId = customId.substringAfter(":").toLong()
             val channel = event.guild?.getVoiceChannelById(channelId)
 
             if (channel == null || VoiceHubRegistry.ownerOf(channelId) != event.member?.idLong) {
                 event.reply("Настраивать этот войс может только его создатель.").setEphemeral(true).queue()
-                return@listener
+                return@onButton
             }
 
             val nameInput = TextInput.create("voice-name", TextInputStyle.SHORT)
@@ -107,21 +104,14 @@ object VoiceHubEvents {
 
     private fun createChannel(ownerId: String, guild: Guild) {
 
-        val category = guild.getCategoryById(TARGET_CATEGORY_ID)
-        val owner = guild.getMemberById(ownerId)
+        val category = guild.getCategoryById(TARGET_CATEGORY_ID) ?: return
+        val owner = guild.getMemberById(ownerId) ?: return
 
-        println("[VoiceHub] category=$category owner=$owner")
-
-        if (category == null || owner == null) return
-
-        category.createVoiceChannel("Войс ${owner.effectiveName}").queue({ channel ->
-            println("[VoiceHub] канал создан: ${channel.id}")
+        category.createVoiceChannel("Войс ${owner.effectiveName}").queue { channel ->
             VoiceHubRegistry.register(channel.idLong, owner.idLong)
             guild.moveVoiceMember(owner, channel).queue()
             channel.sendMessage(VoiceSettingsMessage.build(channel.idLong)).queue()
-        }, { error ->
-            println("[VoiceHub] ошибка создания канала: ${error.message}")
-        })
+        }
 
     }
 

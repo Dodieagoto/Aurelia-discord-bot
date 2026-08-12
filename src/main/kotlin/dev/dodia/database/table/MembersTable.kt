@@ -18,10 +18,19 @@ object MembersTable : IntIdTable("players") {
     val exp = long("exp")
         .default(0L)
 
+    val lvl = integer("lvl")
+        .default(1)
+
+    val levelUp = long("upgrade_level")
+        .default(100)
+
     val coins = long("coins")
         .default(0L)
 
     val diamonds = long("diamonds")
         .default(0L)
+
+    val dmMessageIds = text("dm_message_ids")
+        .default("[]")
 
 }

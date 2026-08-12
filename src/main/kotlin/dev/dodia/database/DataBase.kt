@@ -1,21 +1,21 @@
 package dev.dodia.database
 
+import io.github.cdimascio.dotenv.Dotenv
 import org.jetbrains.exposed.v1.jdbc.Database
 import java.io.File
 
 class DataBase {
     companion object {
-        lateinit var sqlite: Database
+        lateinit var db: Database
             private set
     }
 
     init {
-
-        val dbFile = File("database.db")
-
-        sqlite = Database.connect(
-            url = "jdbc:sqlite:${dbFile.absolutePath}",
-            driver = "org.sqlite.JDBC"
+        db = Database.connect(
+            url = "jdbc:postgresql://178.215.238.139:5432/aure",
+            driver = "org.postgresql.Driver",
+            user = Dotenv.load().get("DB_USER", ""),
+            password = Dotenv.load().get("DB_PASSWORD", "")
         )
 
         DatabaseMigration.migrate()
